@@ -64,7 +64,9 @@ public:
 	}
 	//-----------------------------------------------
 private:
-	string name;	
+	int studentID; 
+
+	string name;
 	static const int maxNameLength = 40;
 
 	string addr;

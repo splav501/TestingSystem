@@ -15,6 +15,12 @@ enum  MenuOptions
 	Exit
 };
 //-----------------------------------------------
+void readSubjects()
+{
+	ifstream inputFile; 
+	inputFile.open("Subjects.txt", ios::in);
+}
+//-----------------------------------------------
 bool validMainMenuChoice(string choice)
 {
 	bool valid = false;
@@ -55,6 +61,7 @@ int main()
 {
 	int menuChoice = 0;
 	Person * currentuser = NULL;
+	Test * currentTest = NULL;
 	do
 	{
 		menuChoice = showMenu();
@@ -65,6 +72,8 @@ int main()
 			case MenuOptions::LogIn:
 				break;
 			case MenuOptions::TakeTest:
+				currentuser = new Student("George");
+				currentTest = new Test();
 				break;
 			case MenuOptions::ResumeTest:
 				break;
