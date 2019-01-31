@@ -4,96 +4,146 @@
 
 #include "Admin.h"
 #include "Student.h"
+
 //-----------------------------------------------
-enum  MenuOptions
+enum MenuOptions
 {
+	Exit,
 	LogIn,
 	Register,
-	TakeTest,
-	ResumeTest,
+	StartTest,
+	ContinueTest,
 	CheckStatistics,
-	Exit
+	Categories,
+	Subjects,
+	Questions,
+	Tests
 };
 //-----------------------------------------------
-void readSubjects()
+bool isAdmin(Person * person)
 {
-	ifstream inputFile; 
-	inputFile.open("Subjects.txt", ios::in);
+	bool result = false;
+	int isAdmin = person->getUserID().compare("admin");
+	if (isAdmin == 0 )
+		result = true;
+	return result;
 }
 //-----------------------------------------------
-bool validMainMenuChoice(string choice)
+bool validMainMenuChoice(int choice, Person * person)
 {
 	bool valid = false;
-	if (choice == "1" || choice == "2" || choice == "3" || choice == "4" || choice == "5")
+
+	if (choice == MenuOptions::Exit )
 		valid = true;
 
+	else
+	{
+
+		if ( ! person->isLoggedIn() )
+		{
+			if (choice == MenuOptions::LogIn || choice == MenuOptions::Register )
+				valid = true;
+		}
+		else
+		{
+			if ( ! isAdmin(person))
+			{
+				if (choice == MenuOptions::StartTest || choice == MenuOptions::ContinueTest || choice == MenuOptions::CheckStatistics)
+					valid = true;
+			}
+			else
+			{
+				if (choice == MenuOptions::Categories || choice == MenuOptions::Questions || choice == MenuOptions::Subjects || choice == MenuOptions::Tests)
+					valid = true;
+			}
+		}
+	}
 	return valid;
 }
 //-----------------------------------------------
-int showMenu()
+int showMenu(Person* person)
 {
-	string choice = "";
-
-	while (!validMainMenuChoice(choice))
+	int choice = 0;
+	while (true)
 	{
-		cout << "1 - Log in" << endl
-			<< "2 - Register" << endl
-			<< "3 - Take Test" << endl
-			<< "4 - Resume Test" << endl
-			<< "5 - Check Statistics" << endl
-			<< "6 - Exit" << endl;
+
+		if ( ! person->isLoggedIn() )
+			cout << "1 - Exit" << endl
+				 << "2 - Log in" << endl
+				 << "3 - Register" << endl;
+		else
+		{
+			cout << "1 - Exit" << endl;
+			
+			if ( ! isAdmin(person)) 
+				cout << "4 - Start Test" << endl
+					 << "5 - Resume Test" << endl
+					 << "6 - Check Statistics" << endl;
+			else
+				cout << "7 - Categories" << endl
+					 << "8 - Subjects" << endl
+					 << "9 - Questions" << endl
+					 << "10 - Tests" << endl;
+		}
 
 		cin >> choice;
 
-		if (validMainMenuChoice(choice))
-
+		if (validMainMenuChoice(choice - 1, person))
+		{
+			cout << "Selected " << choice << endl;
 			break;
-
+		}
 		else
 			cout << "Invalid choice" << endl;
-
 	}
 
-	return atoi(choice.c_str());
+	return choice - 1;
 }
 //-----------------------------------------------
 int main()
 {
-	int menuChoice = 0;
-	Person * currentuser = new Person("Dude");
-
-	//((Admin*)currentuser )  ->addCategory() ;
-
-	string * oopCat = currentuser->readCategory("OOP");
-
-	cout << "Read cat: " << oopCat[0] << endl
-		<< "Description: " << oopCat[0] << endl
-		<< "Professor: " << oopCat[0] << endl;
-
+	int menuChoice = -1;
+	Person * currentUser = new Person("");
+	vector<string> categories;
+	
 	Test * currentTest = NULL;
-	do
+	while (menuChoice != MenuOptions::Exit)
 	{
-		menuChoice = showMenu();
+		menuChoice = showMenu(currentUser);
 		switch (menuChoice)
 		{
 			case MenuOptions::Register:
+
+				currentUser->registerPerson();
 				break;
+
 			case MenuOptions::LogIn:
+
+				currentUser->login();
 				break;
-			case MenuOptions::TakeTest:
-				currentuser = new Student("George");
+
+			case MenuOptions::StartTest:
+
 				currentTest = new Test();
+				((Student *)currentUser)->startTest();
 				break;
-			case MenuOptions::ResumeTest:
+
+			case MenuOptions::ContinueTest:
+
+				((Student *)currentUser)->continueTest();
 				break;
+
 			case MenuOptions::CheckStatistics:
+
+				((Student *)currentUser)->checkStatistics();
 				break;
 
 			case MenuOptions::Exit:
 			default:
+
 				break;
 		}
-	} while (menuChoice != MenuOptions::Exit);
+	}
 	return 0;
 }
 //-----------------------------------------------

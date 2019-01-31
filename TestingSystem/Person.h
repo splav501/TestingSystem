@@ -5,7 +5,7 @@
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
-
+#include <vector>
 
 #include <cctype>
 #include <locale>
@@ -15,50 +15,10 @@ using namespace std;
 class Person 
 {
 public:
-
-
-
-	// trim from start (in place)
-	static inline void ltrim(std::string &s) {
-		s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
-			return !std::isspace(ch);
-		}));
-	}
-
-	// trim from end (in place)
-	static inline void rtrim(std::string &s) {
-		s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
-			return !std::isspace(ch);
-		}).base(), s.end());
-	}
-
-	// trim from both ends (in place)
-	static inline void trim(std::string &s) {
-		ltrim(s);
-		rtrim(s);
-	}
-
-	// trim from start (copying)
-	static inline std::string ltrim_copy(std::string s) {
-		ltrim(s);
-		return s;
-	}
-
-	// trim from end (copying)
-	static inline std::string rtrim_copy(std::string s) {
-		rtrim(s);
-		return s;
-	}
-
-	// trim from both ends (copying)
-	static inline std::string trim_copy(std::string s) {
-		trim(s);
-		return s;
-	}
-
 	//-----------------------------------------------
 	Person (string newName)
 	{
+		this->loggedIn = false;
 		this->setName(newName);
 	}
 	//-----------------------------------------------
@@ -69,7 +29,7 @@ public:
 	//-----------------------------------------------
 	void setName(string newName)
 	{
-		this->name = truncate(newName, this->maxNameLength);
+		this->name = this->truncate(newName, this->maxNameLength);
 	}
 	//-----------------------------------------------
 	string getPhone()
@@ -79,7 +39,7 @@ public:
 	//-----------------------------------------------
 	void setPhone(string newPhone)
 	{
-		this->phone = truncate(newPhone, this->maxPhoneLength);
+		this->phone = this->truncate(newPhone, this->maxPhoneLength);
 	}
 	//-----------------------------------------------
 	string getAddress()
@@ -89,7 +49,7 @@ public:
 	//-----------------------------------------------
 	void setAddress(string newAddress)
 	{
-		this->addr = truncate(newAddress, this->maxAddressLength);
+		this->addr = this->truncate(newAddress, this->maxAddressLength);
 	}
 	//-----------------------------------------------
 	string truncate (string s, int len)
@@ -99,62 +59,179 @@ public:
 	//-----------------------------------------------
 	bool login()
 	{
-		return true;
+		string _userID; 
+		string _password;
+		string userRecord;
+		string truePassword;
+		bool authenticated = false;
+		while (true) 
+		{ 
+			cout << "User ID [or 'exit']: ";
+
+			cin >> _userID;
+			if (_userID.compare("exit") == 0)
+				break;
+
+			cout << "Password [or 'exit']: ";
+
+			cin >> _password;
+			if (_password.compare("exit") == 0)
+				break;
+
+			userRecord = this->readUser(_userID);
+
+			if (userRecord.empty())
+			{
+				cout << "User "<< _userID <<" not found." << endl;
+			}
+			else
+			{
+				truePassword = userRecord.substr(20,Person::maxPasswordLength);
+				padRight(_password, Person::maxPasswordLength);
+
+				if (_password.compare(truePassword) == 0)
+				{
+					int position = 0;
+
+					this->setUserID(_userID);
+					position += Person::maxUserIDLength;
+
+					this->setPassword(userRecord.substr(position,Person::maxPasswordLength));					
+					position += Person::maxPasswordLength;
+
+					this->setName(userRecord.substr(position,Person::maxNameLength));
+					position += Person::maxNameLength;
+
+					this->setAddress(userRecord.substr(position, Person::maxAddressLength));
+					position += Person::maxAddressLength;
+
+					this->setPhone(userRecord.substr(position, Person::maxPhoneLength));
+
+					this->setLoggedIn(true);
+					authenticated = this->isLoggedIn();
+
+					break;
+				}
+			}
+		}
+		
+		return authenticated;
 	}
 	//-----------------------------------------------
 	bool registerPerson()
 	{
 		bool result = true;
 
+		ofstream out("Users.txt", ios::out | ios::app);
+
+		string Category, Description, Professor;
+
+		cout << "New Category: ";
+		getline(cin, Category, '\n');
+
+		cout << "Description: ";
+		getline(cin, Description, '\n');
+
+		cout << "Professor: ";
+		getline(cin, Professor, '\n');
+
+		out << setfill(' ') << left 
+			<< setw(10) << Category 
+			<< setw(40) << Description 
+			<< setw(20) << Professor << endl;
+		
+		out.close();
+
 		return result;
 	}
 	//-----------------------------------------------
-
-	string * readCategory(string cat)
+	void padRight(string &str, const size_t num, const char paddingChar = ' ')
 	{
-		string * result = new string[3];
-		result[0];// = "\0";
-		result[1];//; = "\0";
-		result[2];// = "\0";
-
-		ifstream in("Categories.txt");
+		if(num > str.size())
+			str.insert(str.end(), num - str.size(), paddingChar);
+	}
+	//-----------------------------------------------
+	string readUser(string user)
+	{
+		return readByKey("Users.txt", user, Person::maxUserIDLength);
+	}
+	//-----------------------------------------------
+	string readCategory(string category)
+	{
+		return readByKey("Categories.txt", category, 10);
+	}
+	//-----------------------------------------------
+	string readByKey(string flname, string key, int keyLength)
+	{
+		string result = "";
+		string currentKey;
+		string line;
 		
-		char * Category = new char[10];  
-		char * Description = new char[40]; 
-		char * Professor = new char[20];
+		ifstream in(flname);
 
-		while (!in.eof()) {
+		while ( getline ( in, line, '\n' ) )
+		{
+			currentKey = line.substr(0,keyLength);
 			
-			in.read(Category, 10);
-
-			string categ (Category);
-			string descr (Description);
-			string prof (Professor);
-
-			in.read(Description, 40);
-			in.read(Professor, 21);
-
-			categ = trim_copy(categ);
-			descr = trim_copy(descr);
-			prof = trim_copy(prof);
-
-			if (cat == categ) {
-				result[0] = categ;
-				result[1] = descr;
-				result[2] = prof;
+			this->padRight(key, keyLength);
+			
+			if ( currentKey.compare(key) == 0 )
+			{
+				result = line;
+				break;
 			}
 		}
+		
 		in.close();
 		return result;
 	}
 	//-----------------------------------------------
-	void readAllCategory()
+	void readAllCategories(vector<string>& collection)
 	{
-
+		readAll("Categories.txt", collection);
+	}
+	//-----------------------------------------------
+	void readAll(string flname, vector<string>& collection)
+	{
+		string line;
+		ifstream in(flname);
+		while ( getline ( in, line, '\n' ) )
+			collection.insert(collection.end(), line);
+	}
+	//-----------------------------------------------
+	bool isLoggedIn()
+	{
+		return this->loggedIn;
+	}
+	//-----------------------------------------------
+	void setLoggedIn(bool logdin)
+	{
+		this->loggedIn = logdin;
+	}
+	//-----------------------------------------------
+	string getUserID()
+	{
+		return this->userID;
+	}
+	//-----------------------------------------------
+	void setUserID(string usrid)
+	{
+		this->userID = this->truncate(usrid, Person::maxUserIDLength);
+	}
+	//-----------------------------------------------
+	string getPassword()
+	{
+		return this->userID;
+	}
+	//-----------------------------------------------
+	void setPassword(string _password)
+	{
+		this->password = this->truncate(_password,Person::maxPasswordLength);
 	}
 	//-----------------------------------------------
 private:
-	int studentID; 
+	string userID; 
+	static const int maxUserIDLength = 20;
 
 	string name;
 	static const int maxNameLength = 40;
@@ -164,6 +241,11 @@ private:
 	
 	string phone;
 	static const int maxPhoneLength = 20;
+
+	string password;
+	static const int maxPasswordLength = 30;
+
+	bool loggedIn;
 }; // end class Person
 
 #endif

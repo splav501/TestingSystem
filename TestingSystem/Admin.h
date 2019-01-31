@@ -57,7 +57,11 @@ public:
 		cout << "Professor: ";
 		getline(std::cin, Professor, '\n');
 
-		out << setw(10) << Category << setw(40) << Description << setw(20) << Professor << endl;
+		out << setfill(' ') << left 
+			<< setw(10) << Category 
+			<< setw(40) << Description 
+			<< setw(20) << Professor << endl;
+		
 		out.close();
 	}
 	//-----------------------------------------------

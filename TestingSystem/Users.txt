@@ -1,0 +1,2 @@
+user                password                      Test User                               123 Lenin Street, Kiev, Ukraine         (096)342-5643
+admin               password                      System Administrator                    345 Churchill Avenue, London, UK        (342)75433-43221
