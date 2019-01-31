@@ -60,7 +60,16 @@ int showMenu()
 int main()
 {
 	int menuChoice = 0;
-	Person * currentuser = NULL;
+	Person * currentuser = new Person("Dude");
+
+	//((Admin*)currentuser )  ->addCategory() ;
+
+	string * oopCat = currentuser->readCategory("OOP");
+
+	cout << "Read cat: " << oopCat[0] << endl
+		<< "Description: " << oopCat[0] << endl
+		<< "Professor: " << oopCat[0] << endl;
+
 	Test * currentTest = NULL;
 	do
 	{

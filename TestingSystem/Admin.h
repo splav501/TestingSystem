@@ -39,10 +39,26 @@ public:
 	{
 
 	}
+
 	//-----------------------------------------------
 	void addCategory()
 	{
 
+		ofstream out("Categories.txt", ios::out | ios::app);
+
+		string Category, Description, Professor;
+
+		cout << "New Category: ";
+		getline(std::cin, Category, '\n');
+
+		cout << "Description: ";
+		getline(std::cin, Description, '\n');
+
+		cout << "Professor: ";
+		getline(std::cin, Professor, '\n');
+
+		out << setw(10) << Category << setw(40) << Description << setw(20) << Professor << endl;
+		out.close();
 	}
 	//-----------------------------------------------
 	void deleteCategory()
