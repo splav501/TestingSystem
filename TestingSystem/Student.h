@@ -10,7 +10,7 @@ class Student : public Person
 {
 public:
 	//-----------------------------------------------
-	Student (string newName) : Person (newName)  // pass new name to base constructor
+	Student () : Person () 
 	{
 		// initialize empty list of classes
 		this->tests = new list<Test *>();

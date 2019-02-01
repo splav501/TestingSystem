@@ -6,40 +6,49 @@
 #include <algorithm>
 #include <iomanip>
 #include <vector>
+#include <map>
 
-#include <cctype>
-#include <locale>
+#include "Entity.h"
 
 using namespace std;
 
-class Person 
+class Person : public Entity
 {
 public:
+	static const int maxUserIDLength = 20;
+	static const int maxPasswordLength = 30;
+	static const int maxNameLength = 40;
+	static const int maxAddressLength = 40;
+	static const int maxPhoneLength = 20;
 	//-----------------------------------------------
-	Person (string newName)
+	Person () : Entity("Users.txt")
 	{
-		this->loggedIn = false;
-		this->setName(newName);
+		loggedIn = false;
+		addColumn("UserID", Person::maxUserIDLength, true);
+		addColumn("Password", Person::maxPasswordLength);
+		addColumn("UserName", Person::maxNameLength);
+		addColumn("Address", Person::maxAddressLength);
+		addColumn("Phone", Person::maxPhoneLength);
 	}
 	//-----------------------------------------------
 	string getName()
 	{
-		return this->name;
+		return name;
 	}
 	//-----------------------------------------------
 	void setName(string newName)
 	{
-		this->name = this->truncate(newName, this->maxNameLength);
+		name = truncate(newName, maxNameLength);
 	}
 	//-----------------------------------------------
 	string getPhone()
 	{
-		return this->name;
+		return name;
 	}
 	//-----------------------------------------------
 	void setPhone(string newPhone)
 	{
-		this->phone = this->truncate(newPhone, this->maxPhoneLength);
+		phone = truncate(newPhone, maxPhoneLength);
 	}
 	//-----------------------------------------------
 	string getAddress()
@@ -49,12 +58,7 @@ public:
 	//-----------------------------------------------
 	void setAddress(string newAddress)
 	{
-		this->addr = this->truncate(newAddress, this->maxAddressLength);
-	}
-	//-----------------------------------------------
-	string truncate (string s, int len)
-	{
-		return s.substr(0, min(len, (int) (s.length()) ));
+		addr = truncate(newAddress, maxAddressLength);
 	}
 	//-----------------------------------------------
 	bool login()
@@ -66,24 +70,17 @@ public:
 		bool authenticated = false;
 		while (true) 
 		{ 
-			cout << "User ID [or 'exit']: ";
+			cin.ignore();
 
-			cin >> _userID;
-			if (_userID.compare("exit") == 0)
-				break;
+			_userID = promptColumnValue("UserID");
+			_password = promptColumnValue("Password");
 
-			cout << "Password [or 'exit']: ";
-
-			cin >> _password;
-			if (_password.compare("exit") == 0)
-				break;
-
-			userRecord = this->readUser(_userID);
+			userRecord = readUser(_userID);
 
 			if (userRecord.empty())
-			{
-				cout << "User "<< _userID <<" not found." << endl;
-			}
+			
+				cout << "User "<< _userID <<" not found" << endl;
+			
 			else
 			{
 				truePassword = userRecord.substr(20,Person::maxPasswordLength);
@@ -91,160 +88,151 @@ public:
 
 				if (_password.compare(truePassword) == 0)
 				{
-					int position = 0;
+					setPerson(userRecord);
 
-					this->setUserID(_userID);
-					position += Person::maxUserIDLength;
-
-					this->setPassword(userRecord.substr(position,Person::maxPasswordLength));					
-					position += Person::maxPasswordLength;
-
-					this->setName(userRecord.substr(position,Person::maxNameLength));
-					position += Person::maxNameLength;
-
-					this->setAddress(userRecord.substr(position, Person::maxAddressLength));
-					position += Person::maxAddressLength;
-
-					this->setPhone(userRecord.substr(position, Person::maxPhoneLength));
-
-					this->setLoggedIn(true);
-					authenticated = this->isLoggedIn();
+					setLoggedIn(true);
+					authenticated = isLoggedIn();
 
 					break;
 				}
+				else
+					cout << "Incorrect password" << endl;
 			}
 		}
 		
+		if (authenticated)
+			cout << "Successfully logged in: "  << getName() << endl;
+		else
+			cout << "Login failed" << endl;
+
 		return authenticated;
+	}
+	//-----------------------------------------------
+	void setPerson(string userRecord)
+	{
+		int position = 0;
+		vector<string> vals;
+		setValues(userRecord, vals);
+		setUserID(vals[0]);
+		setPassword(vals[1]);
+		setName(vals[2]);
+		setAddress(vals[3]);
+		setPhone(vals[4]);
 	}
 	//-----------------------------------------------
 	bool registerPerson()
 	{
 		bool result = true;
 
-		ofstream out("Users.txt", ios::out | ios::app);
+		fstream out("Users.txt", ios::in | ios::out | ios::app);
 
-		string Category, Description, Professor;
-
-		cout << "New Category: ";
-		getline(cin, Category, '\n');
-
-		cout << "Description: ";
-		getline(cin, Description, '\n');
-
-		cout << "Professor: ";
-		getline(cin, Professor, '\n');
-
-		out << setfill(' ') << left 
-			<< setw(10) << Category 
-			<< setw(40) << Description 
-			<< setw(20) << Professor << endl;
+		string _userID, _name, _addr, _phone, _password;
 		
+		cin.ignore();
+
+		while (true)
+		{
+			_userID = promptColumnValue("UserID");
+			
+			string adminString = "admin";
+			padRight(adminString, getColumn("UserID")->getLength());
+
+			if (_userID.compare(adminString) != 0)
+			{
+				// OK, because user did NOT choose admin
+				break;
+			}
+			else
+			{
+				if ( readUser("admin").empty() )
+				{
+					// OK, because admin account does not exist yet
+					break;
+				}
+				else
+				{
+					// NOT OK, because admin account already exists, so we stay in the WHILE loop
+					cout << "admin account already exists. Use another user id." << endl;
+				}
+			}
+		}
+
+		_password = promptColumnValue("Password");
+		_name = promptColumnValue("UserName");
+		_addr = promptColumnValue("Address");
+		_phone = promptColumnValue("Phone");
+		
+		string userLine = _userID + _password + _name + _addr + _phone + "\n";
+		out << userLine;
+		setPerson(userLine);
+
 		out.close();
+
+		setLoggedIn(true);
+		result = isLoggedIn();
+
+		cout << _name << ", you have been registered and logged in" << endl;
 
 		return result;
 	}
-	//-----------------------------------------------
-	void padRight(string &str, const size_t num, const char paddingChar = ' ')
-	{
-		if(num > str.size())
-			str.insert(str.end(), num - str.size(), paddingChar);
-	}
+
 	//-----------------------------------------------
 	string readUser(string user)
 	{
-		return readByKey("Users.txt", user, Person::maxUserIDLength);
+		return readRecord(user);
 	}
 	//-----------------------------------------------
-	string readCategory(string category)
+	void showUser(string user)
 	{
-		return readByKey("Categories.txt", category, 10);
+		cout << readUser(user) << endl;
 	}
 	//-----------------------------------------------
-	string readByKey(string flname, string key, int keyLength)
+	void readAllUsers(vector<string>& collection)
 	{
-		string result = "";
-		string currentKey;
-		string line;
-		
-		ifstream in(flname);
-
-		while ( getline ( in, line, '\n' ) )
-		{
-			currentKey = line.substr(0,keyLength);
-			
-			this->padRight(key, keyLength);
-			
-			if ( currentKey.compare(key) == 0 )
-			{
-				result = line;
-				break;
-			}
-		}
-		
-		in.close();
-		return result;
+		readAll(collection);
 	}
 	//-----------------------------------------------
-	void readAllCategories(vector<string>& collection)
+	void displayUsers()
 	{
-		readAll("Categories.txt", collection);
-	}
-	//-----------------------------------------------
-	void readAll(string flname, vector<string>& collection)
-	{
-		string line;
-		ifstream in(flname);
-		while ( getline ( in, line, '\n' ) )
-			collection.insert(collection.end(), line);
+		displayFile();
 	}
 	//-----------------------------------------------
 	bool isLoggedIn()
 	{
-		return this->loggedIn;
+		return loggedIn;
 	}
 	//-----------------------------------------------
 	void setLoggedIn(bool logdin)
 	{
-		this->loggedIn = logdin;
+		loggedIn = logdin;
 	}
 	//-----------------------------------------------
 	string getUserID()
 	{
-		return this->userID;
+		return userID;
 	}
 	//-----------------------------------------------
 	void setUserID(string usrid)
 	{
-		this->userID = this->truncate(usrid, Person::maxUserIDLength);
+		userID = truncate(usrid, Person::maxUserIDLength);
 	}
 	//-----------------------------------------------
 	string getPassword()
 	{
-		return this->userID;
+		return userID;
 	}
 	//-----------------------------------------------
 	void setPassword(string _password)
 	{
-		this->password = this->truncate(_password,Person::maxPasswordLength);
+		password = truncate(_password,Person::maxPasswordLength);
 	}
 	//-----------------------------------------------
 private:
 	string userID; 
-	static const int maxUserIDLength = 20;
-
 	string name;
-	static const int maxNameLength = 40;
-
 	string addr;
-	static const int maxAddressLength = 40;
-	
 	string phone;
-	static const int maxPhoneLength = 20;
-
 	string password;
-	static const int maxPasswordLength = 30;
-
 	bool loggedIn;
 }; // end class Person
 

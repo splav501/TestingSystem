@@ -1,2 +1,13 @@
-user                password                      Test User                               123 Lenin Street, Kiev, Ukraine         (096)342-5643
-admin               password                      System Administrator                    345 Churchill Avenue, London, UK        (342)75433-43221
+user                password                      Test User                               456 Anderson St, Copenhagen, Denmark    (777)777-7777       
+admin               password                      System Admin                            789 Small walkway, San Francisco, CA    (444)444-4444       
+barryon             padrol                        Barry Dodsno                            Barry Dodson                            134-654-8765        
+dave                w3aQ@7t                       David Dodsno                            252 Mason St, New York, NY              436-765-1165        
+masha               missya                        Maria Votnik                            901 Bowham Ave, New York, NY            254-671-8469        
+rusty               nail                          Rusty Bobkin                            36112 Alvin St, Dallas, Tx              531-654-3745        
+caveeater           f36Q%%$7t                     Caev Johnson                            347 Jason Blvd, New York, NY            436-765-1165        
+marks               rk557ss                       Mark Ginsberg                           6132 Tallin St, Dallas, Tx              631-654-3745        
+arch                dover                         march arch                              3211 Mester Ln, Arlington, TX           (712)234-0032       
+stark               bark                          Tony Stark                              24 Dark Bark St, Newark, NY             (432)440-2143       
+engels              marx4eva                      Karl Marx                               24 Budapest                             (956)4320010        
+monk                stronk                        Johnathan J. Monk                       34 Rusty Nail Blvd, Nowhere, TX         (435)546-0965       
+lasttest            pwd                           Uno Mas                                 12 Odin Dr, Ras, NV                     (345)3123344i34432  

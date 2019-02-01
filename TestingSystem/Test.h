@@ -1,13 +1,13 @@
 #ifndef TEST_H
 #define TEST_H
 
-#include <fstream>
+#include "Entity.h"
 
-class Test 
+class Test : public Entity
 {
 public:
 	//-----------------------------------------------
-	Test () 
+	Test () : Entity("Tests.txt")
 	{
 		
 	}
@@ -30,25 +30,16 @@ public:
 	bool checkTestResult()
 	{
 		// call function readTestResult() 
-		// 
-		/*
-			Оценивание нужно вести на основании 12 балльной системы, 
-			привязанной к количеству вопросов теста.
-		*/
 		return true;
 	}
 	//-----------------------------------------------
 	void showTestResult()
 	{
-		/*
-		После сдачи теста гость видит результат тестирования, 
-		количество правильно отвеченных вопросов, процент правильных ответов и полученную оценку.
-		*/
 	}
 	//-----------------------------------------------
 private:
 	
-	string testID; // aDerg42315gbd
+	string testID;
 
 }; // end class Test
 

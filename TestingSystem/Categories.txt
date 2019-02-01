@@ -1,5 +1,5 @@
-OOP       Object Oriented Programming             Sue yue             
+OOP       Object Oriented Programming             John Lennon         
 OIT       Overview of Information Technology      Ivan Drago          
 JS        JavaScript Web Development              Bob Ross            
 DB        Database Intoduction                    Dory Hunky          
-SEC       Security Fundamentals                   Ricky Bobby         
+SEC       Security Fundamentals                   Ricky Bobby
