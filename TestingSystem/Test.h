@@ -12,34 +12,27 @@ public:
 		
 	}
 	//-----------------------------------------------
-	void readStudentAnswers()
-	{
-		// read answers from file StudentAnswers.txt
-	}
-	//-----------------------------------------------
-	void readCorrectAnswers()
-	{
-		// read answers from file StudentAnswers.txt
-	}
-	//-----------------------------------------------
-	void saveTestResult() // create new OR update existing
-	{
-		// write answers to file StudentAnswers.txt
-	}
-	//-----------------------------------------------
 	bool checkTestResult()
 	{
 		// call function readTestResult() 
+
+		// read student answers
+
+		// read correct answers
+		
+		// compare student answers with correct answers
+
+		// write test result to Tests.txt
+
 		return true;
-	}
-	//-----------------------------------------------
-	void showTestResult()
-	{
 	}
 	//-----------------------------------------------
 private:
 	
 	string testID;
+	string userID;
+	string grade;
+	string date;
 
 }; // end class Test
 

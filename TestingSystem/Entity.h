@@ -3,6 +3,8 @@
 
 #include "Column.h"
 
+
+
 class Entity
 {
 public:
@@ -31,6 +33,7 @@ public:
 		
 		ifstream in(flname);
 
+		
 		while ( getline ( in, line, '\n' ) )
 		{
 			currentKey = line.substr(0,keyLength);
@@ -50,8 +53,6 @@ public:
 	//-----------------------------------------------
 	string readRecord(string key)
 	{
-		cout << "Reading..." << endl;
-
 		string result = "";
 		string currentKey;
 		string line;
@@ -60,6 +61,7 @@ public:
 		ifstream in(fileName);
 		int keyLength = keyColumn->getLength();
 
+		
 		while ( getline ( in, line, '\n' ) )
 		{
 			currentKey = line.substr(0,keyLength);
@@ -218,6 +220,8 @@ public:
 			cout << "Displaying File " << fileName << endl;
 			cout << "---------------------------------------------------------" << endl;
 
+			this->showColumns();
+
 			for (int i = 0; i < size; i++)
 				cout << lines[i] << endl;
 
@@ -286,10 +290,20 @@ public:
 	//-----------------------------------------------
 	void showColumns()
 	{
-		cout << "Column names: ";
+		string top = "";
+		
+		padRight(top, this->recordLength(), '-');
+
+		cout << top << endl;
+		string columnName = "";
+
 		for (int i = 0; i < ((int)columns.size()); i++)
-			cout << columns[i]->getName() << " ";
-		cout << endl;
+		{
+			columnName = columns[i]->getName();
+			padRight(columnName, columns[i]->getLength());
+			cout << columnName;
+		}
+		cout << endl << top << endl;
 	}
 	//-----------------------------------------------
 	bool setValues(string record, vector<string> & vals)

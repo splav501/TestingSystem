@@ -5,7 +5,7 @@
 #include "Admin.h"
 #include "Student.h"
 #include "Category.h"
-
+#include "Subject.h"
 //-----------------------------------------------
 enum MenuOptions
 {
@@ -146,12 +146,12 @@ int showMenu(Person* person)
 			
 			if ( ! isAdmin(person)) 
 				cout << "4 - Start Test" << endl
-					 << "5 - Resume Test" << endl
+					 << "5 - Continue Test" << endl
 					 << "6 - Check Statistics" << endl;
 			else
 				cout << "7 - Categories" << endl
-					 << "8 - Questions" << endl
-					 << "9 - Subjects" << endl
+					 << "8 - Subjects" << endl
+					 << "9 - Questions" << endl
 					 << "10- Tests" << endl
 					 << "11- Users" << endl;
 		}
@@ -214,11 +214,11 @@ void fileMaintenance(Entity * entity)
 			cin.ignore();
 			id = entity->promptColumnValue(keyDescription);
 
-			cout << entity->readRecord(id) << endl;
-
 			entity->showColumns();
 
-			cout << "Enter column name where data will be updated" << endl;
+			cout << entity->readRecord(id) << endl;
+
+			cout << endl << "Enter column name where data will be updated" << endl;
 			cin >> colName;
 
 			if (! entity->getColumn(colName))
@@ -303,7 +303,7 @@ int main()
 			    break;
 
 			case MenuOptions::Subjects:
-                //fileMaintenance(new Subject());
+                fileMaintenance(new Subject());
 			    break;
 
 			case MenuOptions::Tests:

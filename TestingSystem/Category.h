@@ -1,16 +1,8 @@
 #ifndef CATEGORY_H
 #define CATEGORY_H
 
-#include <string>
-#include <iostream>
-#include <algorithm>
-#include <iomanip>
-#include <vector>
-#include <map>
-
 #include "Entity.h"
 
-using namespace std;
 
 class Category : public Entity
 {
@@ -26,9 +18,9 @@ public:
 		addColumn("Professor", maxProfessorLength);
 	}
 	//-----------------------------------------------
-	void setCategoryID(string _CategoryID)
+	void setCategoryID(string CategoryID)
 	{
-		CategoryID = _CategoryID;
+		this->CategoryID = CategoryID;
 	}
 	//-----------------------------------------------
 	string getCategoryID()
@@ -36,9 +28,9 @@ public:
 		return CategoryID;
 	}
 	//-----------------------------------------------
-	void setDescription(string _Description)
+	void setDescription(string Description)
 	{
-		Description = _Description;
+		this->Description = Description;
 	}
 	//-----------------------------------------------
 	string getDescription()
@@ -46,9 +38,9 @@ public:
 		return Description;
 	}
 	//-----------------------------------------------
-	void setProfessor(string _Professor)
+	void setProfessor(string Professor)
 	{
-		Professor = _Professor;
+		this->Professor = Professor;
 	}
 	//-----------------------------------------------
 	string getProfessor()
