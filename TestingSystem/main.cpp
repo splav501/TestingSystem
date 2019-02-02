@@ -4,6 +4,7 @@
 
 #include "Admin.h"
 #include "Student.h"
+#include "Category.h"
 
 //-----------------------------------------------
 enum MenuOptions
@@ -21,7 +22,7 @@ enum MenuOptions
 	Users
 };
 //-----------------------------------------------
-enum fileMaintenanceMenuOptions
+enum fileMaintenanceMenuOptions // CRUD  C-create R-read U-update D-delete
 {
 	ExitfileMaintenance,
 	Create,
@@ -294,7 +295,7 @@ int main()
 				break;
 
 			case MenuOptions::Categories:
-				//fileMaintenance(new Category());
+				fileMaintenance(new Category());
 				break;
 
 			case MenuOptions::Questions:

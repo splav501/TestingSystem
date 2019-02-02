@@ -2,4 +2,6 @@ OOP       Object Oriented Programming             John Lennon
 OIT       Overview of Information Technology      Ivan Drago          
 JS        JavaScript Web Development              Bob Ross            
 DB        Database Intoduction                    Dory Hunky          
-SEC       Security Fundamentals                   Ricky Bobby
+SEC       Security Fundamentals                   Ricky Bobby         
+CSE       Computer Science & Engineering          Albert Einstein     
+NEWC      New C# Class                            Mage Prof           

@@ -102,7 +102,8 @@ public:
 		string input;
 		cout << "Enter " << columnName << ": ";
 		getline(cin, input, '\n');
-		padRight(input, getColumn(columnName)->getLength());
+		int columnLength = getColumn(columnName)->getLength();
+		padRight(input, columnLength);
 		return input;
 	}
 	//-----------------------------------------------
