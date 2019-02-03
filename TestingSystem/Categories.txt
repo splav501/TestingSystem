@@ -4,4 +4,4 @@ JS        JavaScript Web Development              Bob Ross
 DB        Database Intoduction                    Dory Hunky          
 SEC       Security Fundamentals                   Ricky Bobby         
 CSE       Computer Science & Engineering          Albert Einstein     
-NEWC      New C# Class                            Mage Prof           
+NEWC      Intorduction to C#                      Mage Prof           

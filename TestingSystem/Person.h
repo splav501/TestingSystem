@@ -1,13 +1,6 @@
 #ifndef PERSON_H
 #define PERSON_H
 
-#include <string>
-#include <iostream>
-#include <algorithm>
-#include <iomanip>
-#include <vector>
-#include <map>
-
 #include "Entity.h"
 
 using namespace std;
@@ -15,7 +8,7 @@ using namespace std;
 class Person : public Entity
 {
 public:
-	static const int maxUserIDLength = 20;
+	static const int maxUserIDLength = 10;
 	static const int maxPasswordLength = 30;
 	static const int maxNameLength = 40;
 	static const int maxAddressLength = 40;
@@ -83,7 +76,9 @@ public:
 			
 			else
 			{
-				truePassword = userRecord.substr(20,Person::maxPasswordLength);
+				int position = getColumn("Password")->getPosition();
+				truePassword = userRecord.substr(position, Person::maxPasswordLength);
+
 				padRight(_password, Person::maxPasswordLength);
 
 				if (_password.compare(truePassword) == 0)
@@ -179,7 +174,9 @@ public:
 	//-----------------------------------------------
 	string readUser(string user)
 	{
-		return readRecord(user);
+		vector<string> results;
+		readRecords(user, results);
+		return results[0];
 	}
 	//-----------------------------------------------
 	void showUser(string user)

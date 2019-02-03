@@ -1,9 +1,16 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <iomanip>
+#include <vector>
+
 #include "Column.h"
 
-
+using namespace std;
 
 class Entity
 {
@@ -51,9 +58,8 @@ public:
 		return result;
 	}
 	//-----------------------------------------------
-	string readRecord(string key)
+	bool readRecords(string key,  vector<string> & records)
 	{
-		string result = "";
 		string currentKey;
 		string line;
 		bool found = false;
@@ -70,7 +76,7 @@ public:
 			
 			if ( currentKey.compare(key) == 0 )
 			{
-				result = line;
+				records.push_back( line );
 				found = true;
 				break;
 			}
@@ -80,7 +86,7 @@ public:
 			cout << "Key " << key << " not found" << endl;
 		
 		in.close();
-		return result;
+		return found;
 	}
 	//-----------------------------------------------
 	int recordLength()

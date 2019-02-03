@@ -15,22 +15,7 @@ public:
 		// initialize empty list of classes
 		this->tests = new list<Test *>();
 	}
-	//-----------------------------------------------
-	void startTest()
-	{
-		cout << "Starting Test" << endl;
-	}
-	//-----------------------------------------------
-	void continueTest()
-	{
-		cout << "Continuing Test" << endl;
-	}
-	//-----------------------------------------------
-	void checkStatistics()
-	{
-		cout << "Checking Statistics" << endl;
-	}
-	//-----------------------------------------------
+
 private:
 	list <Test *> * tests;
 

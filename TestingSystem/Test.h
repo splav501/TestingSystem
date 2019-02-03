@@ -9,23 +9,30 @@ private:
 
 	string TestID;
 	string UserID;
+	string CategoryID;
+	string SubjectID;
 	string Grade;
-	string Date;
+	string TotalQuestions;
+	string CorrectAnswers;
 
 public:
-	static const int maxTestIDLength = 20;
-	static const int maxUserIDLength = 20;
-	static const int maxGradeLength = 20;
-	static const int maxDateLength = 10;
-
-
+	static const int maxTestIDLength = 10;
+	static const int maxUserIDLength = 10;
+	static const int maxGradeLength = 10;
+	static const int maxCategoryIDLength = 10;
+	static const int maxSubjectIDLength = 10;
+	static const int maxTotalQuestionsLength = 10;
+	static const int maxCorrectAnswersLength = 10;
 	//-----------------------------------------------
 	Test() :Entity("Test.txt")
 	{
 		addColumn("TestID", maxTestIDLength, true);
 		addColumn("UserID", maxUserIDLength);
+		addColumn("CategoryID", maxCategoryIDLength);
+		addColumn("SubjectID", maxSubjectIDLength);
 		addColumn("Grade", maxGradeLength);
-		addColumn("Date", maxDateLength);
+		addColumn("TotalQuestions", maxTotalQuestionsLength);
+		addColumn("TorrectAnswers", maxCorrectAnswersLength);
 	}
 	//-----------------------------------------------
 	void setTestID(string testID)
@@ -43,9 +50,14 @@ public:
 		this->Grade = Grade;
 	}
 	//-----------------------------------------------
-	void setDate(string Date)
+	void setTotalQuestions(string TotalQuestions)
 	{
-		this->Date = Date;
+		this->TotalQuestions = TotalQuestions;
+	}
+	//-----------------------------------------------
+	void setCorrectAnswers(string CorrectAnswers)
+	{
+		this->CorrectAnswers = CorrectAnswers;
 	}
 	//-----------------------------------------------
 	string getTestID()
@@ -63,21 +75,29 @@ public:
 		return Grade;
 	}
 	//-----------------------------------------------
-	string getDate()
+	string getTotalQuestions()
 	{
-		return Date;
+		return TotalQuestions;
 	}
-
-
-
-
-
-
-
 	//-----------------------------------------------
-	Test () : Entity("Tests.txt")
+	string getCorrectAnswers()
 	{
-		
+		return CorrectAnswers;
+	}
+	//-----------------------------------------------
+	void startTest()
+	{
+		cout << "Starting Test" << endl;
+	}
+	//-----------------------------------------------
+	void continueTest()
+	{
+		cout << "Continuing Test" << endl;
+	}
+	//-----------------------------------------------
+	void checkStatistics()
+	{
+		cout << "Checking Statistics" << endl;
 	}
 	//-----------------------------------------------
 	bool checkTestResult()

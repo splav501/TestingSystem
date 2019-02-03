@@ -1,11 +1,9 @@
-#include <string>
-#include <iostream>
-#include <fstream>
-
 #include "Admin.h"
 #include "Student.h"
 #include "Category.h"
 #include "Subject.h"
+#include "Question.h"
+#include "Answer.h"
 //-----------------------------------------------
 enum MenuOptions
 {
@@ -19,7 +17,9 @@ enum MenuOptions
 	Subjects,
 	Questions,
 	Tests,
-	Users
+	Users,
+	CorrectAnswers,
+	StudentAnswers
 };
 //-----------------------------------------------
 enum fileMaintenanceMenuOptions // CRUD  C-create R-read U-update D-delete
@@ -81,6 +81,8 @@ bool validMainMenuChoice(int choice, Person * person)
 					case MenuOptions::Subjects:
 					case MenuOptions::Tests:
 					case MenuOptions::Users:
+					case MenuOptions::CorrectAnswers:
+					case MenuOptions::StudentAnswers:
 
 						valid = true;
 			
@@ -153,7 +155,9 @@ int showMenu(Person* person)
 					 << "8 - Subjects" << endl
 					 << "9 - Questions" << endl
 					 << "10- Tests" << endl
-					 << "11- Users" << endl;
+					 << "11- Users" << endl
+					 << "12- Correct Answers" << endl
+					 << "13- Student Answers" << endl;
 		}
 
 		cin >> choice;
@@ -184,6 +188,7 @@ void fileMaintenance(Entity * entity)
 		keyDescription = keyCol->getName();
 	else
 		keyDescription = "ID";
+	vector<string> readResults;
 
 	while (fileMaintenanceChoice != fileMaintenanceMenuOptions::ExitfileMaintenance)
 	{
@@ -203,7 +208,7 @@ void fileMaintenance(Entity * entity)
 			cin.ignore();
 			id = entity->promptColumnValue(keyDescription);
 			
-			cout << entity->readRecord(id) << endl;
+			cout << entity->readRecords(id, readResults) << endl;
 			
 			break;
 
@@ -216,7 +221,7 @@ void fileMaintenance(Entity * entity)
 
 			entity->showColumns();
 
-			cout << entity->readRecord(id) << endl;
+			cout << entity->readRecords(id, readResults) << endl;
 
 			cout << endl << "Enter column name where data will be updated" << endl;
 			cin >> colName;
@@ -281,17 +286,17 @@ int main()
 			case MenuOptions::StartTest:
 
 				currentTest = new Test();
-				((Student *)currentUser)->startTest();
+				currentTest->startTest();
 				break;
 
 			case MenuOptions::ContinueTest:
 
-				((Student *)currentUser)->continueTest();
+				currentTest->continueTest();
 				break;
 
 			case MenuOptions::CheckStatistics:
 
-				((Student *)currentUser)->checkStatistics();
+				currentTest->checkStatistics();
 				break;
 
 			case MenuOptions::Categories:
@@ -299,7 +304,7 @@ int main()
 				break;
 
 			case MenuOptions::Questions:
-                //fileMaintenance(new Question());
+                fileMaintenance(new Question());
 			    break;
 
 			case MenuOptions::Subjects:
@@ -313,6 +318,13 @@ int main()
 			case MenuOptions::Users:
 				fileMaintenance(new Person());
 			    break;
+			case MenuOptions::CorrectAnswers:
+				fileMaintenance(new Answer("CorrectAnswers.txt"));
+				break;
+
+			case MenuOptions::StudentAnswers:
+				fileMaintenance(new Answer("StudentAnswers.txt"));
+				break;
 
 			case MenuOptions::Exit:
 			default:

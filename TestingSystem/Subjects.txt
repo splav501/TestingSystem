@@ -1,0 +1,2 @@
+INHRT               OOP       Inheritance in Classes                  
+NSP                 OIT       Computer litteracy                      

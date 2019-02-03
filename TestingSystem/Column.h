@@ -3,10 +3,6 @@
 
 #include <string>
 #include <iostream>
-#include <algorithm>
-#include <iomanip>
-#include <vector>
-#include <map>
 
 using namespace std;
 
