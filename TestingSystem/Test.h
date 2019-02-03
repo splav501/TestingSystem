@@ -5,7 +5,75 @@
 
 class Test : public Entity
 {
+private:
+
+	string TestID;
+	string UserID;
+	string Grade;
+	string Date;
+
 public:
+	static const int maxTestIDLength = 20;
+	static const int maxUserIDLength = 20;
+	static const int maxGradeLength = 20;
+	static const int maxDateLength = 10;
+
+
+	//-----------------------------------------------
+	Test() :Entity("Test.txt")
+	{
+		addColumn("TestID", maxTestIDLength, true);
+		addColumn("UserID", maxUserIDLength);
+		addColumn("Grade", maxGradeLength);
+		addColumn("Date", maxDateLength);
+	}
+	//-----------------------------------------------
+	void setTestID(string testID)
+	{
+		this->TestID = TestID;
+	}
+	//-----------------------------------------------
+	void setUserID(string UserID)
+	{
+		this->UserID = UserID;
+	}
+	//-----------------------------------------------
+	void setGrade(string Grade)
+	{
+		this->Grade = Grade;
+	}
+	//-----------------------------------------------
+	void setDate(string Date)
+	{
+		this->Date = Date;
+	}
+	//-----------------------------------------------
+	string getTestID()
+	{
+		return TestID;
+	}
+	//-----------------------------------------------
+	string getUserID()
+	{
+		return UserID;
+	}
+	//-----------------------------------------------
+	string getGrade()
+	{
+		return Grade;
+	}
+	//-----------------------------------------------
+	string getDate()
+	{
+		return Date;
+	}
+
+
+
+
+
+
+
 	//-----------------------------------------------
 	Test () : Entity("Tests.txt")
 	{
@@ -27,12 +95,7 @@ public:
 		return true;
 	}
 	//-----------------------------------------------
-private:
-	
-	string testID;
-	string userID;
-	string grade;
-	string date;
+
 
 }; // end class Test
 
