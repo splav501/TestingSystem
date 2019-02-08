@@ -81,6 +81,12 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Categories.txt" />
+    <Text Include="CorrectAnswers.txt" />
+    <Text Include="Questions.txt" />
+    <Text Include="RightAnswers.txt" />
+    <Text Include="StudentAnswers.txt" />
+    <Text Include="Subjects.txt" />
+    <Text Include="Tests.txt" />
     <Text Include="Users.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

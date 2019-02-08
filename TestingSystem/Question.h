@@ -14,7 +14,7 @@ class Question : public Entity
 public:
 	static const int maxQuestionIDLength = 10;
 	static const int maxTestIDLength = 10;
-	static const int maxQuestionNumberLength = 5;
+	static const int maxQuestionNumberLength = 10;
 	static const int maxQuestionTextLength = 60;
 	
 	//-----------------------------------------------

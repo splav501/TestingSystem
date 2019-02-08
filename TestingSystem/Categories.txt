@@ -1,5 +1,6 @@
-OOP       Object Oriented Programming             John Lennon         
-OIT       Overview of Information Technology      Ivan Drago          
+CPP       Introduction c++                        Andrey Voznik            
+OOP       Object Oriented Programming             Harlamenko Vadim         
+OIT       Overview of Information Technology      Samohvalov Uri          
 JS        JavaScript Web Development              Bob Ross            
 DB        Database Intoduction                    Dory Hunky          
 SEC       Security Fundamentals                   Ricky Bobby         

@@ -88,6 +88,36 @@ public:
 	void startTest()
 	{
 		cout << "Starting Test" << endl;
+
+		// ask for test id
+
+		// read test id from user's keyboard input
+
+		// create a blank vectors for questions
+		// open the Questions.txt file ios::in
+
+		// create a blank vectors for answers
+		// open the Answers.txt file ios::in
+
+		// create a blank vectors for student answers
+		// open the StudentAnswers.txt file ios::out
+
+		// WHILE LOOP
+
+		// while not end of Questions.txt
+		// {
+		//      read a question from Questions.txt
+		//      display the question on the screen
+		//      read student answer
+		//      write answer to studentAnswers.txt
+		// }
+
+		// close Questions.txt
+		// close Answers.txt
+		// close StudentAnswers.txt
+
+		cout << "Finished test. You may continue this test later" 
+			<< endl << "if you have unanswered questions." << endl;
 	}
 	//-----------------------------------------------
 	void continueTest()

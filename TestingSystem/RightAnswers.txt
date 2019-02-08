@@ -1,0 +1,16 @@
+aid1                qid1      a         no        a string of numbers                                                             
+aid2                qid1      b         no        an array of numbers                                                             
+aid3                qid1      c         no        an array of strings                                                             
+aid4                qid1      d         yes       user defined type, holds its own data members and member functions              
+aid5                qid2      a         no        a gathering of people                                                           
+aid6                qid2      b         no        an logical operator                                                             
+aid7                qid2      c         yes       group of statements that together perform a task                                
+aid8                qid2      d         no        user defined type                                                               
+aid5                qid3      a         yes       repetition control structure executing a specific number of times               
+aid6                qid3      b         no        a C++ function operator                                                         
+aid7                qid3      c         no        a control structure for making decisions                                        
+aid8                qid3      d         no        a binary operator                                                               
+aid9                qid4      a         yes       a unary operator                                                                
+aid10               qid4      b         no        repetition structure executing as long as a given condition is true             
+aid11               qid4      c         no        an "if" statement                                                               
+aid12               qid4      d         no        an arry of strings                                                              

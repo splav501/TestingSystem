@@ -1,2 +1,8 @@
-INHRT               OOP       Inheritance in Classes                  
-NSP                 OIT       Computer litteracy                      
+sub1                CPP       Data Types                              
+sub2                CPP       Loops and if statements                 
+sub3                CPP       Arrays and Structs                      
+sub4                CPP       Functions                               
+sub5                CPP       Objects and Classes                     
+sub6                CPP       Arrays and Strings                      
+sub7                CPP       Operator Overloading                    
+sub8                CPP       Inheritance                             

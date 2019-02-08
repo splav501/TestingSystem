@@ -13,14 +13,15 @@ private:
 	string UserID;
 	string QuestionID;
 	string Variant;
+	string IsCorrect;
 	string AnswerText;
-
 public:
 	static const int maxAnswerIDLength = 10;
 	static const int maxUserIDLength = 10;
 	static const int maxQuestionIDLength = 10;
 	static const int maxVariantLength = 10;
-	static const int maxAnswerLength = 40;
+	static const int maxIsCorrectLength = 10;
+	static const int maxAnswerLength = 80;
 	//-----------------------------------------------
 	Answer(string filename) : Entity(filename) // filename can be "CorrectAnswers.txt" or "StudentAnswers.txt"
 	{
@@ -28,6 +29,7 @@ public:
 		addColumn("UserID", maxUserIDLength);
 		addColumn("QuestionID", maxQuestionIDLength);
 		addColumn("Variant", maxVariantLength);
+		addColumn("IsCorrect", maxIsCorrectLength);
 		addColumn("AnswerText", maxAnswerLength);
 	}
 	//-----------------------------------------------
@@ -45,6 +47,11 @@ public:
 	{
 		this->AnswerText = Answers;
 	}
+	//-----------------------------------------------
+	void setIsCorrect(string IsCorrect)
+	{
+		this->IsCorrect = IsCorrect;
+	}
 
 	//-----------------------------------------------
 	string getAnswerID()
@@ -61,6 +68,12 @@ public:
 	{
 		return AnswerText;
 	}
+	string getIsCorrect()
+	{
+		return this->IsCorrect;
+	}
+	//-----------------------------------------------
+
 };
 
 #endif

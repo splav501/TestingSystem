@@ -83,7 +83,6 @@ bool validMainMenuChoice(int choice, Person * person)
 					case MenuOptions::Users:
 					case MenuOptions::CorrectAnswers:
 					case MenuOptions::StudentAnswers:
-
 						valid = true;
 			
 		}
@@ -319,7 +318,7 @@ int main()
 				fileMaintenance(new Person());
 			    break;
 			case MenuOptions::CorrectAnswers:
-				fileMaintenance(new Answer("CorrectAnswers.txt"));
+				fileMaintenance(new Answer("RightAnswers.txt"));
 				break;
 
 			case MenuOptions::StudentAnswers:
