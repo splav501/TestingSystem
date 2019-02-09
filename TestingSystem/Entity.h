@@ -58,33 +58,71 @@ public:
 		return result;
 	}
 	//-----------------------------------------------
-	bool readRecords(string key,  vector<string> & records)
+	// read records which match ONE search criterion
+	bool readRecords(string key, string columnName, vector<string> & records)
 	{
+		vector<string> keys;
+		keys.push_back(key);
+		vector<string> columnNames;
+		columnNames.push_back(columnName);
+
+		return readRecords(keys, columnNames, records);
+	}
+	//-----------------------------------------------
+	// read records which match MANY search criteria
+	bool readRecords(vector<string> keys, vector<string> columnNames, vector<string> & records)
+	{
+		if (keys.size() != columnNames.size()) {
+			cout << "Number of search leys must match number of search columns" << endl;
+			return false;
+		}
+
 		string currentKey;
 		string line;
 		bool found = false;
 
-		ifstream in(fileName);
-		int keyLength = keyColumn->getLength();
+		bool columnValueMatched = true;
 
-		
+		ifstream in(fileName);
+
+		vector<Column *> searchColumns;
+
+		for (int i = 0; i < (int)(columnNames.size()); i++)
+
+			searchColumns.push_back(this->getColumn(columnNames[i]));
+
+		int keyLength; 
+		int keyPosition; 
+
 		while ( getline ( in, line, '\n' ) )
 		{
-			currentKey = line.substr(0,keyLength);
-			
-			padRight(key, keyLength);
-			
-			if ( currentKey.compare(key) == 0 )
+			columnValueMatched = true;
+
+			for (int i = 0; i < (int)(columnNames.size()); i++)
 			{
-				records.push_back( line );
-				found = true;
-				break;
+				Column * searchColumn = this->getColumn(columnNames[i]);
+				
+				keyLength = searchColumn->getLength();
+				keyPosition = searchColumn->getPosition();
+
+				currentKey = line.substr(keyPosition, keyLength);
+
+				padRight(keys[i], keyLength);
+
+				if (currentKey.compare(keys[i]) != 0)
+					columnValueMatched = false;//  this line text does not match our search criteria
 			}
+
+			if (columnValueMatched)
+				records.push_back(line);
+
 		}
 		
-		if (! found)
-			cout << "Key " << key << " not found" << endl;
-		
+		if (records.size() == 0)
+			cout << "Key not found" << endl;
+		else
+			found = true;
+
 		in.close();
 		return found;
 	}
@@ -212,6 +250,12 @@ public:
 		in.close();
 	}
 	//-----------------------------------------------
+	void showVector(vector<string>& vec)
+	{
+		for (int i = 0; i < (int)(vec.size()); i++)
+			cout << vec[i] << endl;
+	}
+	//-----------------------------------------------
 	void displayFile() 
 	{
 		vector<string> lines;
@@ -288,9 +332,12 @@ public:
 		Column * col = NULL;
 
 		for (int i = 0; i < ((int)columns.size()); i++)
-			if ( columns[i]->getName().compare(colName) == 0)
+		{
+			if (columns[i]->getName().compare(colName) == 0)
+			{
 				col = columns[i];
-
+			}
+		}
 		return col;
 	}
 	//-----------------------------------------------
@@ -326,6 +373,16 @@ public:
 		}
 		
 		return res;
+	}
+	//-----------------------------------------------
+	string getValue(string record, string columnName)
+	{
+		Column * col = getColumn(columnName);
+		
+		int position = col->getPosition();
+		int colLength = col->getLength();
+
+		return record.substr(position, colLength);
 	}
 	//-----------------------------------------------
 	void deleteRecord(string recid)

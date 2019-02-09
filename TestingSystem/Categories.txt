@@ -1,4 +1,4 @@
-CPP       Introduction c++                        Andrey Voznik            
+CPP2      Introduction c++                        Andrey Voznik            
 OOP       Object Oriented Programming             Harlamenko Vadim         
 OIT       Overview of Information Technology      Samohvalov Uri          
 JS        JavaScript Web Development              Bob Ross            
@@ -6,3 +6,4 @@ DB        Database Intoduction                    Dory Hunky
 SEC       Security Fundamentals                   Ricky Bobby         
 CSE       Computer Science & Engineering          Albert Einstein     
 NEWC      Intorduction to C#                      Mage Prof           
+CPP       Copy of C++ Basics                      Prof                

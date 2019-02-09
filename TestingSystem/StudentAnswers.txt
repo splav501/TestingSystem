@@ -1,0 +1,2 @@
+aid1      user      qid1      a         no        a string of numbers                                                             
+aid7      user      qid2      c         yes       group of statements that together perform a task                                

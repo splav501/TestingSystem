@@ -175,7 +175,7 @@ public:
 	string readUser(string user)
 	{
 		vector<string> results;
-		readRecords(user, results);
+		readRecords(user, "UserID", results);
 		return results[0];
 	}
 	//-----------------------------------------------

@@ -3,6 +3,13 @@
 
 #include "Entity.h"
 
+#include "Admin.h"
+#include "Student.h"
+#include "Category.h"
+#include "Subject.h"
+#include "Question.h"
+#include "Answer.h"
+
 class Test : public Entity
 {
 private:
@@ -85,36 +92,60 @@ public:
 		return CorrectAnswers;
 	}
 	//-----------------------------------------------
-	void startTest()
+	void startTest(Person * user)
 	{
-		cout << "Starting Test" << endl;
+		string studentID = user->getUserID();
 
-		// ask for test id
+		// ask for test id and read it from user's keyboard input
+		cin.ignore();
+		string testID = promptColumnValue("TestID");
 
-		// read test id from user's keyboard input
+		cout << "User " << studentID << " is starting test " << testID << endl;
 
 		// create a blank vectors for questions
-		// open the Questions.txt file ios::in
+		Question * tempQuestion = new Question();
+		vector <string> questionRecords;
+		tempQuestion->readRecords(testID, "TestID", questionRecords);
 
 		// create a blank vectors for answers
-		// open the Answers.txt file ios::in
+		Answer * rightAnswer = new Answer("RightAnswers.txt");
 
-		// create a blank vectors for student answers
-		// open the StudentAnswers.txt file ios::out
+		Answer * studentAnswer = new Answer("StudentAnswers.txt");
+		vector <string> answers;
 
-		// WHILE LOOP
+		string questionId, studentVariant, studentAnswerString, answerID, answerText, isCorrect;
 
-		// while not end of Questions.txt
-		// {
-		//      read a question from Questions.txt
-		//      display the question on the screen
-		//      read student answer
-		//      write answer to studentAnswers.txt
-		// }
+		// from 0 to end of vector questionRecords
+		for (int i = 0; i < (int)(questionRecords.size()); i++)
+		{
+			questionId = tempQuestion->getValue( questionRecords[i], "QuestionID");
+			// clear old answers
+			answers.clear();
+			// read all 4 answers for this questions
+			rightAnswer->readRecords(questionId, "QuestionID", answers);
+		
+			// display the question on the screen
+			cout << tempQuestion->getValue(questionRecords[i], "QuestionText") << endl;
 
-		// close Questions.txt
-		// close Answers.txt
-		// close StudentAnswers.txt
+			// display 4 vartiants of the answer on the screen
+			for (int answerIndex = 0; answerIndex < (int)(answers.size()); answerIndex++)
+			{
+				cout << studentAnswer->getValue(answers[answerIndex], "Variant")
+					<< " " << studentAnswer->getValue(answers[answerIndex], "AnswerText") << endl;
+			}
+			
+
+			// read student answer
+			cout << "Enter a, b, c, or d" << endl;
+			cin >> studentVariant;
+
+			studentAnswerString = studentAnswer->chosenAnswer(studentVariant, answers);
+			answerID = studentAnswer->getValue(studentAnswerString, "AnswerID");
+			answerText = studentAnswer->getValue(studentAnswerString, "AnswerText");
+			isCorrect = studentAnswer->getValue(studentAnswerString, "IsCorrect");
+
+			studentAnswer->saveAnswers(answerID, studentID, questionId, studentVariant, isCorrect, answerText);
+		}
 
 		cout << "Finished test. You may continue this test later" 
 			<< endl << "if you have unanswered questions." << endl;

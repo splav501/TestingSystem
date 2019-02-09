@@ -23,7 +23,7 @@ public:
 		addColumn("QuestionID", maxQuestionIDLength, true);
 		addColumn("TestID", maxTestIDLength);
 		addColumn("QuestionNumber", maxQuestionNumberLength);
-		addColumn("Question", maxQuestionTextLength);
+		addColumn("QuestionText", maxQuestionTextLength);
 	}
 		//-----------------------------------------------
 		void setQuestionID(string QuestionID)
@@ -65,8 +65,12 @@ public:
 		{
 			return QuestionText;
 		}
-		
-	
+		//-----------------------------------------------
+		bool readQuestions(string testID, vector<string> & questionStrings) {
+			bool result = false;
+			readRecords(testID, "TestID", questionStrings);
+		}
+		//-----------------------------------------------
 };
 
 

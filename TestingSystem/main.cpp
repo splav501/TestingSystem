@@ -1,9 +1,5 @@
-#include "Admin.h"
-#include "Student.h"
-#include "Category.h"
-#include "Subject.h"
-#include "Question.h"
-#include "Answer.h"
+#include "Test.h"
+
 //-----------------------------------------------
 enum MenuOptions
 {
@@ -191,6 +187,8 @@ void fileMaintenance(Entity * entity)
 
 	while (fileMaintenanceChoice != fileMaintenanceMenuOptions::ExitfileMaintenance)
 	{
+		readResults.clear();
+
 		fileMaintenanceChoice = showfileMaintenanceMenu(entity->getFileName());
 
 		switch (fileMaintenanceChoice)
@@ -207,8 +205,10 @@ void fileMaintenance(Entity * entity)
 			cin.ignore();
 			id = entity->promptColumnValue(keyDescription);
 			
-			cout << entity->readRecords(id, readResults) << endl;
+			entity->readRecords(id, entity->getKeyColumn()->getName(), readResults);
 			
+			entity->showVector(readResults);
+
 			break;
 
 		case fileMaintenanceMenuOptions::Update:
@@ -220,7 +220,9 @@ void fileMaintenance(Entity * entity)
 
 			entity->showColumns();
 
-			cout << entity->readRecords(id, readResults) << endl;
+			entity->readRecords(id, entity->getKeyColumn()->getName(), readResults);
+			
+			entity->showVector(readResults);
 
 			cout << endl << "Enter column name where data will be updated" << endl;
 			cin >> colName;
@@ -285,7 +287,7 @@ int main()
 			case MenuOptions::StartTest:
 
 				currentTest = new Test();
-				currentTest->startTest();
+				currentTest->startTest(currentUser);
 				break;
 
 			case MenuOptions::ContinueTest:
