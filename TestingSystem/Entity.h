@@ -356,12 +356,13 @@ public:
 
 		cout << top << endl;
 		string columnName = "";
-
+		int colLength;
 		for (int i = 0; i < ((int)columns.size()); i++)
 		{
 			columnName = columns[i]->getName();
-			padRight(columnName, columns[i]->getLength());
-			cout << columnName;
+			colLength = columns[i]->getLength();
+			padRight(columnName, colLength);
+			cout << truncate(columnName, colLength);
 		}
 		cout << endl << top << endl;
 	}

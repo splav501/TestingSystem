@@ -295,7 +295,7 @@ public:
 		cin.ignore();
 		string testID = promptColumnValue("TestID");
 
-		cout << "User " << userID << " is checking test results" << testID << endl;
+		cout << "User " << userID << " is checking test results " << testID << endl;
 
 		vector<string> keys;
 		keys.push_back(testID);
@@ -340,14 +340,20 @@ public:
 			aKeys.push_back(userID);
 			aKeys.push_back(question->getValue(questions[i],"QuestionID"));
 
+			studentAnswers.clear();
 			studentAnswer->readRecords(aKeys, aColNames, studentAnswers);
 
 			studentAnswer->showColumns();
 
-			for (int i = 0; i < (int)(studentAnswers.size()); i++)
+			if (studentAnswers.size()>0)
 			{
-				cout << studentAnswers[i] << endl;
+				cout << studentAnswers[0] << endl;
 			}
+			else
+			{
+				cout << "This question was not answered" << endl;
+			}
+
 			cout << endl;
 		}
 
