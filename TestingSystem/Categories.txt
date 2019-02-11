@@ -1,4 +1,4 @@
-CPP2      Introduction c++                        Andrey Voznik            
+CPP2      Introduction c++                        Oleg Shkolnikov            
 OOP       Object Oriented Programming             Harlamenko Vadim         
 OIT       Overview of Information Technology      Samohvalov Uri          
 JS        JavaScript Web Development              Bob Ross            

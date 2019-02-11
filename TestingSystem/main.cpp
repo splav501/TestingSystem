@@ -264,6 +264,8 @@ void fileMaintenance(Entity * entity)
 //----------------------------------------------
 int main()
 {
+	setlocale(LC_ALL,"Russian");
+	
 	int menuChoice = -1;
 	Person * currentUser = new Person();
 	
@@ -292,12 +294,18 @@ int main()
 
 			case MenuOptions::ContinueTest:
 
-				currentTest->continueTest();
+				if ( currentTest == NULL)
+					currentTest = new Test();
+
+				currentTest->continueTest(currentUser);
 				break;
 
 			case MenuOptions::CheckStatistics:
 
-				currentTest->checkStatistics();
+				if (currentTest == NULL)
+					currentTest = new Test();
+
+				currentTest->checkStatistics(currentUser);
 				break;
 
 			case MenuOptions::Categories:
@@ -313,7 +321,7 @@ int main()
 			    break;
 
 			case MenuOptions::Tests:
-                //fileMaintenance(new Test());
+                fileMaintenance(new Test());
 			    break;
 
 			case MenuOptions::Users:

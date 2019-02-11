@@ -16,8 +16,6 @@ private:
 
 	string TestID;
 	string UserID;
-	string CategoryID;
-	string SubjectID;
 	string Grade;
 	string TotalQuestions;
 	string CorrectAnswers;
@@ -26,17 +24,13 @@ public:
 	static const int maxTestIDLength = 10;
 	static const int maxUserIDLength = 10;
 	static const int maxGradeLength = 10;
-	static const int maxCategoryIDLength = 10;
-	static const int maxSubjectIDLength = 10;
 	static const int maxTotalQuestionsLength = 10;
 	static const int maxCorrectAnswersLength = 10;
 	//-----------------------------------------------
-	Test() :Entity("Test.txt")
+	Test() :Entity("Tests.txt")
 	{
 		addColumn("TestID", maxTestIDLength, true);
 		addColumn("UserID", maxUserIDLength);
-		addColumn("CategoryID", maxCategoryIDLength);
-		addColumn("SubjectID", maxSubjectIDLength);
 		addColumn("Grade", maxGradeLength);
 		addColumn("TotalQuestions", maxTotalQuestionsLength);
 		addColumn("TorrectAnswers", maxCorrectAnswersLength);
@@ -44,27 +38,32 @@ public:
 	//-----------------------------------------------
 	void setTestID(string testID)
 	{
-		this->TestID = TestID;
+		this->TestID = testID;
+		padRight(this->TestID, maxTestIDLength);
 	}
 	//-----------------------------------------------
 	void setUserID(string UserID)
 	{
 		this->UserID = UserID;
+		padRight(this->UserID, maxUserIDLength);
 	}
 	//-----------------------------------------------
 	void setGrade(string Grade)
 	{
 		this->Grade = Grade;
+		padRight(this->Grade, maxGradeLength);
 	}
 	//-----------------------------------------------
 	void setTotalQuestions(string TotalQuestions)
 	{
 		this->TotalQuestions = TotalQuestions;
+		padRight(this->TotalQuestions, maxTotalQuestionsLength);
 	}
 	//-----------------------------------------------
 	void setCorrectAnswers(string CorrectAnswers)
 	{
 		this->CorrectAnswers = CorrectAnswers;
+		padRight(this->CorrectAnswers, maxCorrectAnswersLength);
 	}
 	//-----------------------------------------------
 	string getTestID()
@@ -94,13 +93,115 @@ public:
 	//-----------------------------------------------
 	void startTest(Person * user)
 	{
-		string studentID = user->getUserID();
+		string userID = user->getUserID();
 
 		// ask for test id and read it from user's keyboard input
 		cin.ignore();
 		string testID = promptColumnValue("TestID");
 
-		cout << "User " << studentID << " is starting test " << testID << endl;
+		cout << "User " << userID << " is starting test " << testID << endl;
+
+		// create a blank vectors for questions
+		Question * tempQuestion = new Question();
+		vector <string> questionRecords;
+		tempQuestion->readRecords(testID, "TestID", questionRecords);
+
+		// create a blank vectors for answers
+		Answer * rightAnswer = new Answer("RightAnswers.txt");
+
+		Answer * studentAnswer = new Answer("StudentAnswers.txt");
+		vector <string> answers;
+
+		string questionId, studentVariant, studentAnswerString, answerID, answerText, isCorrect;
+		
+		string grade;
+		int questionCount = 0; // question counter
+		int correctAnswerCount = 0;
+		string correctAnswerString = "yes";
+		padRight(correctAnswerString, maxCorrectAnswersLength);
+
+		// from 0 to end of vector questionRecords
+		for (questionCount; questionCount < (int)(questionRecords.size()); questionCount++)
+		{
+			questionId = tempQuestion->getValue( questionRecords[questionCount], "QuestionID");
+			// clear old answers
+			answers.clear();
+			// read all 4 answers for this questions
+			rightAnswer->readRecords(questionId, "QuestionID", answers);
+		
+			// display the question on the screen
+			cout << tempQuestion->getValue(questionRecords[questionCount], "QuestionText") << endl;
+
+			// display 4 vartiants of the answer on the screen
+			for (int answerIndex = 0; answerIndex < (int)(answers.size()); answerIndex++)
+			{
+				cout << studentAnswer->getValue(answers[answerIndex], "Variant")
+					<< " " << studentAnswer->getValue(answers[answerIndex], "AnswerText") << endl;
+			}
+			
+			// read student answer
+			cout << "Enter a, b, c, or d" << endl;
+			cin >> studentVariant;
+
+			studentAnswerString = studentAnswer->chosenAnswer(studentVariant, answers);
+			answerID = studentAnswer->getValue(studentAnswerString, "AnswerID");
+			answerText = studentAnswer->getValue(studentAnswerString, "AnswerText");
+			isCorrect = studentAnswer->getValue(studentAnswerString, "IsCorrect");
+
+			if (isCorrect.compare(correctAnswerString) == 0)
+				correctAnswerCount++;
+
+			studentAnswer->saveAnswers(answerID, userID, questionId, studentVariant, isCorrect, answerText);
+		}
+		
+		saveTest(testID, userID, calculateGrade(questionCount, correctAnswerCount), to_string(questionCount), to_string(correctAnswerCount));
+
+		cout << "Finished test. You may continue this test later" 
+			<< endl << "if you have unanswered questions." << endl;
+	}
+	//-----------------------------------------------
+	string calculateGrade(int totalQuestions, int totalCorrectA)
+	{		
+		double pointsPerQuestion = (double) 12 / totalQuestions;
+		int result = (int) pointsPerQuestion * totalCorrectA;
+		return std::to_string(result);
+	}
+	//-----------------------------------------------
+	void saveTest(string TestID,string UserID,string Grade,string TotalQuestions,string CorrectAnswers)
+	{
+		cout << "Saving test..." << endl;
+
+		fstream file(getFileName(), ios::out | ios::app | ios::ate);
+		string line = "";
+
+		setTestID(TestID);
+		line += this->TestID;
+		setUserID(UserID);
+		line += this->UserID;
+		setGrade(Grade);
+		line += this->Grade;
+		setTotalQuestions(TotalQuestions);
+		line += this->TotalQuestions;
+		setCorrectAnswers(CorrectAnswers);
+		line += this->CorrectAnswers;
+		line += "\n";
+
+		file << line;
+		file.close();
+		cout << "Test saved" << endl << line << endl;
+	}
+	//-----------------------------------------------
+	void continueTest(Person * user)
+	{
+		cout << "Continuing Test..." << endl;
+
+		string userID = user->getUserID();
+
+		// ask for test id and read it from user's keyboard input
+		cin.ignore();
+		string testID = promptColumnValue("TestID");
+
+		cout << "User " << userID << " is Continuing test " << testID << endl;
 
 		// create a blank vectors for questions
 		Question * tempQuestion = new Question();
@@ -115,17 +216,45 @@ public:
 
 		string questionId, studentVariant, studentAnswerString, answerID, answerText, isCorrect;
 
+		string grade;
+		int questionCount = 0; // question counter
+		int correctAnswerCount = 0;
+		string correctAnswerString = "yes";
+		padRight(correctAnswerString, maxCorrectAnswersLength);
+
+		vector<string> existingAnswers;
+		vector<string> answerKeys;
+		answerKeys.push_back(userID);
+		vector<string> answerColumnNames;
+		answerColumnNames.push_back("UserID");
+		answerColumnNames.push_back("QuestionID");
+		
 		// from 0 to end of vector questionRecords
-		for (int i = 0; i < (int)(questionRecords.size()); i++)
+		for (questionCount; questionCount < (int)(questionRecords.size()); questionCount++)
 		{
-			questionId = tempQuestion->getValue( questionRecords[i], "QuestionID");
+			questionId = tempQuestion->getValue(questionRecords[questionCount], "QuestionID");
+
+			// add current question ID to keys vector
+			answerKeys.push_back(questionId);
+			existingAnswers.clear();
+			studentAnswer->readRecords(answerKeys, answerColumnNames, existingAnswers);
+			// remove current question ID from keys vector, because it will change next repetition of the loop
+			answerKeys.pop_back();
+
+			// display the question on the screen
+			cout << tempQuestion->getValue(questionRecords[questionCount], "QuestionText") << endl;
+
+			if (existingAnswers.size() > 0)
+			{
+				cout << "This question was already answered. Please, answer the next question." << endl;
+				continue;
+			}			
+
 			// clear old answers
 			answers.clear();
 			// read all 4 answers for this questions
 			rightAnswer->readRecords(questionId, "QuestionID", answers);
-		
-			// display the question on the screen
-			cout << tempQuestion->getValue(questionRecords[i], "QuestionText") << endl;
+
 
 			// display 4 vartiants of the answer on the screen
 			for (int answerIndex = 0; answerIndex < (int)(answers.size()); answerIndex++)
@@ -133,7 +262,6 @@ public:
 				cout << studentAnswer->getValue(answers[answerIndex], "Variant")
 					<< " " << studentAnswer->getValue(answers[answerIndex], "AnswerText") << endl;
 			}
-			
 
 			// read student answer
 			cout << "Enter a, b, c, or d" << endl;
@@ -144,36 +272,86 @@ public:
 			answerText = studentAnswer->getValue(studentAnswerString, "AnswerText");
 			isCorrect = studentAnswer->getValue(studentAnswerString, "IsCorrect");
 
-			studentAnswer->saveAnswers(answerID, studentID, questionId, studentVariant, isCorrect, answerText);
+			if (isCorrect.compare(correctAnswerString) == 0)
+				correctAnswerCount++;
+
+			studentAnswer->saveAnswers(answerID, userID, questionId, studentVariant, isCorrect, answerText);
+
 		}
 
-		cout << "Finished test. You may continue this test later" 
+		saveTest(testID, userID, calculateGrade(questionCount, correctAnswerCount), to_string(questionCount), to_string(correctAnswerCount));
+
+		cout << "Finished test. You may continue this test later"
 			<< endl << "if you have unanswered questions." << endl;
 	}
 	//-----------------------------------------------
-	void continueTest()
+	void checkStatistics(Person * user)
 	{
-		cout << "Continuing Test" << endl;
-	}
-	//-----------------------------------------------
-	void checkStatistics()
-	{
-		cout << "Checking Statistics" << endl;
-	}
-	//-----------------------------------------------
-	bool checkTestResult()
-	{
-		// call function readTestResult() 
+		cout << "Checking Statistics..." << endl;
 
-		// read student answers
+		string userID = user->getUserID();
 
-		// read correct answers
+		// ask for test id and read it from user's keyboard input
+		cin.ignore();
+		string testID = promptColumnValue("TestID");
+
+		cout << "User " << userID << " is checking test results" << testID << endl;
+
+		vector<string> keys;
+		keys.push_back(testID);
+		keys.push_back(userID);
+
+		vector<string> ColumnNames;
+		ColumnNames.push_back("TestID");
+		ColumnNames.push_back("UserID");
+
+		vector<string> studentAnswers;
+		vector<string> testResults;
+		vector<string> questions;
+
+		// read Tests.txt
+		this->readRecords(keys, ColumnNames, testResults);
+
+		// read Questions.txt
+		Question * question = new Question();
+		vector<string> qColNames;
+		qColNames.push_back("TestID");
+		vector<string> qKeys;
+		qKeys.push_back(testID);
 		
-		// compare student answers with correct answers
+		question->readRecords(qKeys, qColNames, questions);
+		
+		Answer * studentAnswer = new Answer("StudentAnswers.txt");
+		vector<string> aColNames;
+		aColNames.push_back("UserID");
+		aColNames.push_back("QuestionID");
+		vector<string> aKeys;
 
-		// write test result to Tests.txt
+		// show test result
+		this->showColumns();
+		cout << testResults[0] << endl << endl;
 
-		return true;
+		for (int i = 0; i < (int)(questions.size()); i++)
+		{
+			question->showColumns();
+			cout << questions[i] << endl;
+			
+			aKeys.clear();
+			aKeys.push_back(userID);
+			aKeys.push_back(question->getValue(questions[i],"QuestionID"));
+
+			studentAnswer->readRecords(aKeys, aColNames, studentAnswers);
+
+			studentAnswer->showColumns();
+
+			for (int i = 0; i < (int)(studentAnswers.size()); i++)
+			{
+				cout << studentAnswers[i] << endl;
+			}
+			cout << endl;
+		}
+
+		cout << endl;
 	}
 	//-----------------------------------------------
 

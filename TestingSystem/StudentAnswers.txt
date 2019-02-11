@@ -1,2 +1,3 @@
-aid1      user      qid1      a         no        a string of numbers                                                             
-aid7      user      qid2      c         yes       group of statements that together perform a task                                
+aid4      user      qid1      d         yes       user defined type, holds its own data members and member functions              
+aid5      user      qid2      a         no        a gathering of people                                                           
+aid13     user      qid5      a         yes       variable that stores the address of another variable                            

@@ -34,11 +34,11 @@ public:
 	}
 	//-----------------------------------------------
 	// prompts for new record data and saves it, but doesn't load it into memory
-	void saveAnswers(string _AnswerID,string _UserID,	string _QuestionID,string _Variant,string _IsCorrect,string _AnswerText)
+	void saveAnswers(string _AnswerID, string _UserID, string _QuestionID, string _Variant, string _IsCorrect, string _AnswerText)
 	{
 		cout << "Saving answer..." << endl;
 
-		fstream file( getFileName(), ios::out | ios::app | ios::ate);
+		fstream file(getFileName(), ios::out | ios::app | ios::ate);
 
 		string line = "";
 		setAnswerID(_AnswerID);
@@ -53,7 +53,7 @@ public:
 		line += this->IsCorrect;
 		setAnswers(_AnswerText);
 		line += this->AnswerText;
-		
+
 		line += "\n";
 
 		file << line;
@@ -61,7 +61,7 @@ public:
 		cout << "Answer saved" << endl << line << endl;
 	}
 	//-----------------------------------------------
-	string chosenAnswer(string variant, vector<string> answers) 
+	string chosenAnswer(string variant, vector<string> answers)
 	{
 		string currentVariant;
 		string result = "";
@@ -72,9 +72,10 @@ public:
 			currentVariant = getValue(answers[i], "Variant");
 
 			if (currentVariant.compare(variant) == 0)
+			{
 				result = answers[i];
+			}
 		}
-
 		return result;
 	}
 	// ---------------------------------------

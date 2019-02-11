@@ -21,39 +21,41 @@ public:
 		setFileName(fname);
 	}
 	//-----------------------------------------------
-	string truncate (string s, int len)
+	string truncate(string s, int len)
 	{
-		return s.substr(0, min(len, (int) (s.length()) ));
+		return s.substr(0, min(len, (int)(s.length())));
 	}
 	//-----------------------------------------------
 	void padRight(string &str, const size_t num, const char paddingChar = ' ')
 	{
-		if(num > str.size())
+		if (num > str.size())
+		{
 			str.insert(str.end(), num - str.size(), paddingChar);
-	}	
+		}
+	}
 	//-----------------------------------------------
 	string readByKey(string flname, string key, int keyLength)
 	{
 		string result = "";
 		string currentKey;
 		string line;
-		
+
 		ifstream in(flname);
 
-		
-		while ( getline ( in, line, '\n' ) )
+
+		while (getline(in, line, '\n'))
 		{
-			currentKey = line.substr(0,keyLength);
-			
+			currentKey = line.substr(0, keyLength);
+
 			padRight(key, keyLength);
-			
-			if ( currentKey.compare(key) == 0 )
+
+			if (currentKey.compare(key) == 0)
 			{
 				result = line;
 				break;
 			}
 		}
-		
+
 		in.close();
 		return result;
 	}
@@ -88,20 +90,22 @@ public:
 		vector<Column *> searchColumns;
 
 		for (int i = 0; i < (int)(columnNames.size()); i++)
-
+		{
 			searchColumns.push_back(this->getColumn(columnNames[i]));
+		}
 
-		int keyLength; 
-		int keyPosition; 
 
-		while ( getline ( in, line, '\n' ) )
+		int keyLength;
+		int keyPosition;
+
+		while (getline(in, line, '\n'))
 		{
 			columnValueMatched = true;
 
 			for (int i = 0; i < (int)(columnNames.size()); i++)
 			{
 				Column * searchColumn = this->getColumn(columnNames[i]);
-				
+
 				keyLength = searchColumn->getLength();
 				keyPosition = searchColumn->getPosition();
 
@@ -110,14 +114,17 @@ public:
 				padRight(keys[i], keyLength);
 
 				if (currentKey.compare(keys[i]) != 0)
-					columnValueMatched = false;//  this line text does not match our search criteria
+				{
+					columnValueMatched = false;     //  this line text does not match our search criteria
+				}
 			}
 
 			if (columnValueMatched)
+			{
 				records.push_back(line);
-
+			}
 		}
-		
+
 		if (records.size() == 0)
 			cout << "Key not found" << endl;
 		else
@@ -131,16 +138,16 @@ public:
 	{
 		int recordLength = 0;
 		for (int i = 0; i < ((int)columns.size()); i++)
-			recordLength += columns[i]-> getLength();
+			recordLength += columns[i]->getLength();
 
 		return recordLength;
 	}
 	//-----------------------------------------------
-	void promptColumnValues( vector<string> & vals )
+	void promptColumnValues(vector<string> & vals)
 	{
 		cin.ignore();
 		for (int i = 0; i < ((int)columns.size()); i++)
-			vals.push_back( promptColumnValue(columns[i]->getName()) );
+			vals.push_back(promptColumnValue(columns[i]->getName()));
 	}
 	//-----------------------------------------------
 	string promptColumnValue(string columnName)
@@ -156,7 +163,7 @@ public:
 	// prompts for new record data and saves it, but doesn't load it into memory
 	void createRecord()
 	{
-		cout << "Creating..." << endl;		
+		cout << "Creating..." << endl;
 
 		string line = "";
 
@@ -172,7 +179,7 @@ public:
 
 		file << line;
 		file.close();
-		cout << "Created:" << endl << line << endl;		
+		cout << "Created:" << endl << line << endl;
 	}
 	//-----------------------------------------------
 	int updateRecord(string key, string writeColumnName, string writeValue)
@@ -186,9 +193,9 @@ public:
 		{
 			currentColumn = columns[i];
 
-			if ( currentColumn -> getName().compare(writeColumnName) == 0 )
+			if (currentColumn->getName().compare(writeColumnName) == 0)
 			{
-				result = writeByKey( key, keyColumn->getLength(), writeValue, currentColumn->getPosition(), currentColumn->getLength());
+				result = writeByKey(key, keyColumn->getLength(), writeValue, currentColumn->getPosition(), currentColumn->getLength());
 				break;
 			}
 		}
@@ -205,28 +212,28 @@ public:
 		int result = -1;
 		string currentKey;
 		string line;
-		
-		fstream file(fileName, ios::in | ios::out );
+
+		fstream file(fileName, ios::in | ios::out);
 
 		int recNum = 0;
 		int writePosition;
 
-		while ( getline ( file, line, '\n' ) )
+		while (getline(file, line, '\n'))
 		{
-			currentKey = line.substr(0,keyLength);
-			
-			padRight(key, keyLength);
-			
-			if ( currentKey.compare(key) == 0 )
-			{
-				writePosition = recNum * ( 2 + recordLength() ) + columnPosition;
+			currentKey = line.substr(0, keyLength);
 
-				file.seekp (writePosition);
-				
+			padRight(key, keyLength);
+
+			if (currentKey.compare(key) == 0)
+			{
+				writePosition = recNum * (2 + recordLength()) + columnPosition;
+
+				file.seekp(writePosition);
+
 				padRight(writeValue, columnLength);
-				const char * writeVal  = writeValue.c_str();
-				
-				file.write (writeVal, columnLength);	
+				const char * writeVal = writeValue.c_str();
+
+				file.write(writeVal, columnLength);
 
 				result = recNum;
 				break;
@@ -234,7 +241,7 @@ public:
 
 			recNum++;
 		}
-		
+
 		file.close();
 		return result;
 	}
@@ -244,9 +251,9 @@ public:
 		string line;
 		ifstream in(fileName);
 
-		while ( getline ( in, line, '\n' ) )
+		while (getline(in, line, '\n'))
 			collection.push_back(line);
-		
+
 		in.close();
 	}
 	//-----------------------------------------------
@@ -256,13 +263,13 @@ public:
 			cout << vec[i] << endl;
 	}
 	//-----------------------------------------------
-	void displayFile() 
+	void displayFile()
 	{
 		vector<string> lines;
 		readAll(lines);
 		int size = (int)(lines.size());
-		
-		if ( size < 1)
+
+		if (size < 1)
 			cout << "File " << fileName << " is empty" << endl;
 		else
 		{
@@ -320,7 +327,7 @@ public:
 	void addColumn(string nm, int ln, bool isKey = false)
 	{
 		Column * c = new Column(nm, recordLength(), ln, isKey);
-		
+
 		if (isKey)
 			setKeyColumn(c);
 
@@ -344,7 +351,7 @@ public:
 	void showColumns()
 	{
 		string top = "";
-		
+
 		padRight(top, this->recordLength(), '-');
 
 		cout << top << endl;
@@ -361,24 +368,24 @@ public:
 	//-----------------------------------------------
 	bool setValues(string record, vector<string> & vals)
 	{
-		bool res= true;
+		bool res = true;
 		int position = 0;
 		int colLength;
-		
+
 		for (int i = 0; i < ((int)columns.size()); i++)
 		{
 			colLength = columns[i]->getLength();
-			vals.push_back(record.substr(position, colLength)); 
+			vals.push_back(record.substr(position, colLength));
 			position += colLength;
 		}
-		
+
 		return res;
 	}
 	//-----------------------------------------------
 	string getValue(string record, string columnName)
 	{
 		Column * col = getColumn(columnName);
-		
+
 		int position = col->getPosition();
 		int colLength = col->getLength();
 

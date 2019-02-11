@@ -14,3 +14,7 @@ aid9                qid4      a         yes       a unary operator
 aid10               qid4      b         no        repetition structure executing as long as a given condition is true             
 aid11               qid4      c         no        an "if" statement                                                               
 aid12               qid4      d         no        an arry of strings                                                              
+aid13               qid5      a         yes       variable that stores the address of another variable                            
+aid14               qid5      b         no        a string of arrays                                                              
+aid15               qid5      c         no        an address of a function                                                        
+aid16               qid5      d         no        a control structure for decision makin                                          

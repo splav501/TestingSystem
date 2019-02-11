@@ -1,4 +1,5 @@
 qid1      tid1      qn1       What is an object?                                          
-qid2      tid1      qn2       What is a function?                                         
+qid2      tid1      qn2       What is a function? 
 qid3      tid2      qn1       What is a for loop?                                         
 qid4      tid2      qn2       What is a while loop?                                       
+qid5      tid1      qn3       What is a pointer?                                          
