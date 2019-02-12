@@ -95,51 +95,51 @@ public:
 	{
 		string userID = user->getUserID();
 
-		// ask for test id and read it from user's keyboard input
+		// запросить идентификатор теста и прочитать его с клавиатуры пользователя
 		cin.ignore();
 		string testID = promptColumnValue("TestID");
 
 		cout << "User " << userID << " is starting test " << testID << endl;
 
-		// create a blank vectors for questions
+		// создать пустые векторы для вопросов
 		Question * tempQuestion = new Question();
 		vector <string> questionRecords;
 		tempQuestion->readRecords(testID, "TestID", questionRecords);
 
-		// create a blank vectors for answers
+		// создать пустые векторы для ответов
 		Answer * rightAnswer = new Answer("RightAnswers.txt");
 
 		Answer * studentAnswer = new Answer("StudentAnswers.txt");
 		vector <string> answers;
 
 		string questionId, studentVariant, studentAnswerString, answerID, answerText, isCorrect;
-		
+
 		string grade;
-		int questionCount = 0; // question counter
+		int questionCount = 0; // счетчик вопросов
 		int correctAnswerCount = 0;
 		string correctAnswerString = "yes";
 		padRight(correctAnswerString, maxCorrectAnswersLength);
 
-		// from 0 to end of vector questionRecords
+		// от 0 до конца вектора questionRecords
 		for (questionCount; questionCount < (int)(questionRecords.size()); questionCount++)
 		{
-			questionId = tempQuestion->getValue( questionRecords[questionCount], "QuestionID");
-			// clear old answers
+			questionId = tempQuestion->getValue(questionRecords[questionCount], "QuestionID");
+			// clear старые ответы
 			answers.clear();
-			// read all 4 answers for this questions
+			// прочитать все 4 ответа на этот вопрос
 			rightAnswer->readRecords(questionId, "QuestionID", answers);
-		
-			// display the question on the screen
+
+			// отобразить вопрос на экране
 			cout << tempQuestion->getValue(questionRecords[questionCount], "QuestionText") << endl;
 
-			// display 4 vartiants of the answer on the screen
+			// вывести на экран 4 варианта ответа
 			for (int answerIndex = 0; answerIndex < (int)(answers.size()); answerIndex++)
 			{
 				cout << studentAnswer->getValue(answers[answerIndex], "Variant")
 					<< " " << studentAnswer->getValue(answers[answerIndex], "AnswerText") << endl;
 			}
-			
-			// read student answer
+
+			//прочитать ответ студента
 			cout << "Enter a, b, c, or d" << endl;
 			cin >> studentVariant;
 
@@ -153,21 +153,21 @@ public:
 
 			studentAnswer->saveAnswers(answerID, userID, questionId, studentVariant, isCorrect, answerText);
 		}
-		
+
 		saveTest(testID, userID, calculateGrade(questionCount, correctAnswerCount), to_string(questionCount), to_string(correctAnswerCount));
 
-		cout << "Finished test. You may continue this test later" 
+		cout << "Finished test. You may continue this test later"
 			<< endl << "if you have unanswered questions." << endl;
 	}
 	//-----------------------------------------------
 	string calculateGrade(int totalQuestions, int totalCorrectA)
-	{		
-		double pointsPerQuestion = (double) 12 / totalQuestions;
-		int result = (int) pointsPerQuestion * totalCorrectA;
+	{
+		double pointsPerQuestion = (double)12 / totalQuestions;
+		int result = (int)pointsPerQuestion * totalCorrectA;
 		return std::to_string(result);
 	}
 	//-----------------------------------------------
-	void saveTest(string TestID,string UserID,string Grade,string TotalQuestions,string CorrectAnswers)
+	void saveTest(string TestID, string UserID, string Grade, string TotalQuestions, string CorrectAnswers)
 	{
 		cout << "Saving test..." << endl;
 
@@ -197,18 +197,18 @@ public:
 
 		string userID = user->getUserID();
 
-		// ask for test id and read it from user's keyboard input
+		// запросить идентификатор теста и прочитать его с клавиатуры пользователя
 		cin.ignore();
 		string testID = promptColumnValue("TestID");
 
 		cout << "User " << userID << " is Continuing test " << testID << endl;
 
-		// create a blank vectors for questions
+		// создать пустые векторы для вопросов
 		Question * tempQuestion = new Question();
 		vector <string> questionRecords;
 		tempQuestion->readRecords(testID, "TestID", questionRecords);
 
-		// create a blank vectors for answers
+		// создать пустые векторы для ответов
 		Answer * rightAnswer = new Answer("RightAnswers.txt");
 
 		Answer * studentAnswer = new Answer("StudentAnswers.txt");
@@ -217,7 +217,7 @@ public:
 		string questionId, studentVariant, studentAnswerString, answerID, answerText, isCorrect;
 
 		string grade;
-		int questionCount = 0; // question counter
+		int questionCount = 0; // счетчик вопросов
 		int correctAnswerCount = 0;
 		string correctAnswerString = "yes";
 		padRight(correctAnswerString, maxCorrectAnswersLength);
@@ -228,17 +228,18 @@ public:
 		vector<string> answerColumnNames;
 		answerColumnNames.push_back("UserID");
 		answerColumnNames.push_back("QuestionID");
-		
-		// from 0 to end of vector questionRecords
+
+		// от 0 до конца вектора questionRecords
 		for (questionCount; questionCount < (int)(questionRecords.size()); questionCount++)
 		{
 			questionId = tempQuestion->getValue(questionRecords[questionCount], "QuestionID");
 
-			// add current question ID to keys vector
+			// добавить ID текущего вопроса в вектор ключей
+			
 			answerKeys.push_back(questionId);
 			existingAnswers.clear();
 			studentAnswer->readRecords(answerKeys, answerColumnNames, existingAnswers);
-			// remove current question ID from keys vector, because it will change next repetition of the loop
+			// удалить ID текущего вопроса из вектора ключей, потому что это изменит следующий повтор цикла
 			answerKeys.pop_back();
 
 			// display the question on the screen
@@ -248,7 +249,7 @@ public:
 			{
 				cout << "This question was already answered. Please, answer the next question." << endl;
 				continue;
-			}			
+			}
 
 			// clear old answers
 			answers.clear();
@@ -295,7 +296,7 @@ public:
 		cin.ignore();
 		string testID = promptColumnValue("TestID");
 
-		cout << "User " << userID << " is checking test results " << testID << endl;
+		cout << "User " << userID << " is checking test results" << testID << endl;
 
 		vector<string> keys;
 		keys.push_back(testID);
@@ -318,9 +319,9 @@ public:
 		qColNames.push_back("TestID");
 		vector<string> qKeys;
 		qKeys.push_back(testID);
-		
+
 		question->readRecords(qKeys, qColNames, questions);
-		
+
 		Answer * studentAnswer = new Answer("StudentAnswers.txt");
 		vector<string> aColNames;
 		aColNames.push_back("UserID");
@@ -335,10 +336,10 @@ public:
 		{
 			question->showColumns();
 			cout << questions[i] << endl;
-			
+
 			aKeys.clear();
 			aKeys.push_back(userID);
-			aKeys.push_back(question->getValue(questions[i],"QuestionID"));
+			aKeys.push_back(question->getValue(questions[i], "QuestionID"));
 
 			studentAnswers.clear();
 			studentAnswer->readRecords(aKeys, aColNames, studentAnswers);

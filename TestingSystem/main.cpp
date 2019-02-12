@@ -101,7 +101,7 @@ int showfileMaintenanceMenu(string flname)
 			 << "6 - List   [all      records in " << flname << "]" << endl;
 
 		cin >> choice;
-		choice -= 1; // account for zero based, so the offset is 1
+		choice -= 1; //счет на основе нуля, поэтому смещение составляет 1
 
 		if (choice == MenuOptions::Exit)
 		{
@@ -195,7 +195,7 @@ void fileMaintenance(Entity * entity)
 		{
 		case fileMaintenanceMenuOptions::Create:
 			
-			entity->createRecord(); // prompts for new record data and saves it, but doesn't load it into memory
+			entity->createRecord(); // запрашивает новые данные записи и сохраняет их, но не загружает их в память
 			break;
 
 		case fileMaintenanceMenuOptions::Read:
